@@ -2,4 +2,7 @@ extends layout.pug
 
 block content
 	section#content
-		h2 Welcome, student!
+		h2= prompt
+		if hint
+			p
+				i Hint: #{hint}
