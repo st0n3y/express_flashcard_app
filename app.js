@@ -4,8 +4,16 @@ const express = require('express');
 
 const app = express();
 
+app.set('view engine', 'pug');
+
 app.get('/', (req, res) => {
-	response.send();
+	res.render('index');
 });
 
-app.listen(3000);
+app.get('/hello', (req, res) => {
+	res.send('<h1>Hello, JS developer!</h1>');
+});
+
+app.listen(3000, () => {
+	console.log('The application is running on localhost:3000');
+});
