@@ -6,10 +6,23 @@ const cookieParser = require('cookie-parser');
 
 const app = express();
 
+app.set('view engine', 'pug');
+
+// Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.set('view engine', 'pug');
+// app.use((req, res, next) => {
+// 	req.message = 'This message made it';
+// 	const err = new Error('Something went wrong');
+// 	err.status = 500;
+// 	next(err);
+// });
+
+app.use((req, res, next) => {
+	console.log(req.message);
+	next();
+});
 
 app.get('/', (req, res) => {
 	const name = req.cookies.username;
@@ -44,6 +57,18 @@ app.post('/hello', (req, res) => {
 app.post('/goodbye', (req, res) => {
 	res.clearCookie('username', { path: '/' });
 	res.redirect('/hello');
+});
+
+app.use((req, res, next) => {
+	const err = new Error("Not Found");
+	err.status = 404;
+	next(err);
+});
+
+app.use((err, req, res, next) => {
+	res.locals.error = err;
+	res.status(err.status);
+	res.render('error');
 });
 
 app.listen(3000, () => {
